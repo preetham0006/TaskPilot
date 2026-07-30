@@ -20,9 +20,12 @@ public class ConsoleUI {
     System.out.println("1. Add Task");
     System.out.println("2. Display All Tasks");
     System.out.println("3. Find Task by ID");
-    System.out.println("4. Update Task Status");
-    System.out.println("5. Delete Task");
-    System.out.println("6. Exit");
+    System.out.println("4. Search by Priority");
+    System.out.println("5. Search by Status");
+    System.out.println("6. Update Task Status");
+    System.out.println("7. Delete Task");
+    System.out.println("8. Exit");
+    System.out.println("9. Sort Tasks by Priority");
     System.out.print("\nEnter your choice: ");
     }
 
@@ -76,14 +79,7 @@ public class ConsoleUI {
     {
        List<Task> tasks = manager.getAllTasks();
 
-        if (tasks.isEmpty()) {
-            System.out.println("No tasks available.");
-            return;
-        }
-
-        for (Task task : tasks) {
-            System.out.println(task);
-        }
+      displayTasks(tasks);
     }
 
     private void findTaskById()
@@ -126,7 +122,7 @@ public class ConsoleUI {
                             break;
                         default:
                             System.out.println("Invalid Status!");
-                            continue;
+                            return;
                     }
 
                     if (manager.updateTaskStatus(updateId, newStatus)) {
@@ -148,6 +144,90 @@ public class ConsoleUI {
                         System.out.println("Task not found.");
                     }
     }
+    
+    private void searchByPriority() {
+        System.out.println("Select Priority to Search:");
+        System.out.println("1. LOW");
+        System.out.println("2. MEDIUM");
+        System.out.println("3. HIGH");
+
+        int priorityChoice = sc.nextInt();
+        sc.nextLine(); // Consume newline
+
+        Priority priority;
+
+        switch (priorityChoice) {
+            case 1:
+                priority = Priority.LOW;
+                break;
+            case 2:
+                priority = Priority.MEDIUM;
+                break;
+            case 3:
+                priority = Priority.HIGH;
+                break;
+            default:
+                System.out.println("Invalid Priority!");
+                return;
+        }
+
+       displayAllTasks();
+    }
+    private void searchByStatus() {
+        System.out.println("Select Status to Search:");
+        System.out.println("1. TODO");
+        System.out.println("2. IN_PROGRESS");
+        System.out.println("3. COMPLETED");
+
+        int statusChoice = sc.nextInt();
+        sc.nextLine(); // Consume newline
+
+        TaskStatus status;
+
+        switch (statusChoice) {
+            case 1:
+                status = TaskStatus.TODO;
+                break;
+            case 2:
+                status = TaskStatus.IN_PROGRESS;
+                break;
+            case 3:
+                status = TaskStatus.COMPLETED;
+                break;
+            default:
+                System.out.println("Invalid Status!");
+                return;
+        }
+
+        List<Task> tasks = manager.searchByStatus(status);
+
+        displayTasks(tasks);
+    }
+
+    private void displayTasks(List<Task> tasks) {
+
+    if (tasks.isEmpty()) {
+        System.out.println("No tasks found.");
+        return;
+    }
+
+    for (Task task : tasks) {
+        System.out.println(task);
+    }
+
+}
+
+private void sortTasksByPriority() 
+
+{
+    List<Task> tasks = manager.getAllTasks();
+
+    if (tasks.isEmpty()) {
+        System.out.println("No tasks available to sort.");
+        return;
+    }
+    manager.sortByPriority();
+}    
 
 
     public void start() {
@@ -175,23 +255,34 @@ public class ConsoleUI {
 
                     findTaskById();
                     break;
-
                 case 4:
 
-                    updateTaskStatus();
+                    searchByPriority();
                     break;
 
                 case 5:
 
+                    searchByStatus();
+                    break;
+                case 6:
+
+                    updateTaskStatus();
+                    break;
+
+                case 7:
+
                     deleteTask();
                     break;
 
-                case 6:
+                case 8:
 
                     running = false;
                     System.out.println("\nThank you for using Task Management System!");
 
                     break;
+                case 9:
+                    sortTasksByPriority();
+                    break;    
 
                 default:
 
