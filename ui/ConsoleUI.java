@@ -1,11 +1,19 @@
+package ui;
 import java.util.Scanner;
 import java.util.List;
+import model.Task;
+import model.Priority;
+import model.TaskStatus;
+import service.TaskManager;
+import storage.FileStorage;
+
 
 
 public class ConsoleUI {
 
     private Scanner sc;
     private TaskManager manager;
+    private FileStorage fileStorage = new FileStorage();
 
     public ConsoleUI() {
         sc = new Scanner(System.in);
@@ -86,7 +94,7 @@ switch (statusChoice) {
         status = TaskStatus.COMPLETED;
         break;
     default:
-        System.out.println("Invalid Status! Setting to TODO.");
+        System.out.println("Invalid Status! Setting to TODO."); 
         status = TaskStatus.TODO;
 }
 
@@ -286,6 +294,7 @@ private void sortTasksByTitle() {
     displayTasks(sortedTasks);
 }
 
+
     public void start() {
          boolean running = true;
 
@@ -332,9 +341,11 @@ private void sortTasksByTitle() {
 
                 case 8:
 
+                    fileStorage.saveTasks(manager.getAllTasks());
+                    System.out.println("Tasks saved successfully!");
+
                     running = false;
                     System.out.println("\nThank you for using Task Management System!");
-
                     break;
                 case 9:
                     sortTasksByPriority();

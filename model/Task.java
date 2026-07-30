@@ -1,3 +1,4 @@
+package model;
 public class Task {
 
     // Shared counter for generating unique IDs

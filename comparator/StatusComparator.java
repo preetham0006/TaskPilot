@@ -1,4 +1,8 @@
+package comparator;
 import java.util.Comparator;
+//import model.Priority;
+import model.Task;
+import model.TaskStatus;
 
 
 public class StatusComparator implements Comparator<Task> {

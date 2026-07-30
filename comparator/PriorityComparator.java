@@ -1,4 +1,7 @@
+package comparator;
 import java.util.Comparator;
+import model.Priority;
+import model.Task;
 
 public class PriorityComparator implements Comparator<Task> {
 

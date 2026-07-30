@@ -1,5 +1,12 @@
+package service;
 import java.util.List;
 import java.util.ArrayList;
+import model.Task;
+import model.TaskStatus;
+import model.Priority;
+import comparator.PriorityComparator;
+import comparator.StatusComparator;
+
 //import java.util.Collections;
 import java.util.Comparator;
 
