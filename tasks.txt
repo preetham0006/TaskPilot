@@ -1,2 +1,0 @@
-1|UI|make it better|LOW|TODO
-2|coffee|yay|HIGH|COMPLETED
