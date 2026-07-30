@@ -26,6 +26,8 @@ public class ConsoleUI {
     System.out.println("7. Delete Task");
     System.out.println("8. Exit");
     System.out.println("9. Sort Tasks by Priority");
+    System.out.println("10. Sort Tasks by Status");
+    System.out.println("11. Sort Tasks by Title");
     System.out.print("\nEnter your choice: ");
     }
 
@@ -42,6 +44,7 @@ public class ConsoleUI {
                     System.out.println("1. LOW");
                     System.out.println("2. MEDIUM");
                     System.out.println("3. HIGH");
+                    
 
                     int priorityChoice = sc.nextInt();
                     sc.nextLine();
@@ -62,12 +65,36 @@ public class ConsoleUI {
                             System.out.println("Invalid Priority! Setting to LOW.");
                             priority = Priority.LOW;
                     }
+                    System.out.println("Select Status:");
+System.out.println("1. TODO");
+System.out.println("2. IN_PROGRESS");
+System.out.println("3. COMPLETED");
+
+int statusChoice = sc.nextInt();
+sc.nextLine();
+
+TaskStatus status;
+
+switch (statusChoice) {
+    case 1:
+        status = TaskStatus.TODO;
+        break;
+    case 2:
+        status = TaskStatus.IN_PROGRESS;
+        break;
+    case 3:
+        status = TaskStatus.COMPLETED;
+        break;
+    default:
+        System.out.println("Invalid Status! Setting to TODO.");
+        status = TaskStatus.TODO;
+}
 
                     Task task = new Task(
                             title,
                             description,
                             priority,
-                            TaskStatus.TODO
+                            status
                     );
 
                     manager.addTask(task);
@@ -217,18 +244,47 @@ public class ConsoleUI {
 
 }
 
-private void sortTasksByPriority() 
+private void sortTasksByPriority() {
 
-{
     List<Task> tasks = manager.getAllTasks();
 
     if (tasks.isEmpty()) {
         System.out.println("No tasks available to sort.");
         return;
     }
-    manager.sortByPriority();
-}    
 
+    List<Task> sortedTasks = manager.sortByPriority();
+    displayTasks(sortedTasks);
+} 
+
+private void sortTasksByStatus()
+
+{
+
+    List<Task> tasks = manager.getAllTasks();
+
+    if (tasks.isEmpty()) {
+        System.out.println("No tasks available to sort.");
+        return;
+    }
+
+    List<Task> sortedTasks = manager.sortByStatus();
+
+    displayTasks(sortedTasks);
+}
+private void sortTasksByTitle() {
+
+    List<Task> tasks = manager.getAllTasks();
+
+    if (tasks.isEmpty()) {
+        System.out.println("No tasks available to sort.");
+        return;
+    }
+
+    List<Task> sortedTasks = manager.sortByTitle();
+
+    displayTasks(sortedTasks);
+}
 
     public void start() {
          boolean running = true;
@@ -282,7 +338,13 @@ private void sortTasksByPriority()
                     break;
                 case 9:
                     sortTasksByPriority();
+                    break;   
+                case 10:
+                    sortTasksByStatus();
                     break;    
+                case 11:     
+                    sortTasksByTitle();
+                    break;
 
                 default:
 

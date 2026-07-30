@@ -1,20 +1,25 @@
 public class Task {
 
+    // Shared counter for generating unique IDs
+    private static int nextId = 1;
+
     // Fields
-    private int id;
+    private final int id;
     private String title;
     private String description;
     private Priority priority;
     private TaskStatus status;
-    private static int nextId = 1;
+
     // Default Constructor
     public Task() {
+        this.id = nextId++;
     }
 
     // Parameterized Constructor
-    public Task(int id, String title, String description,
+    public Task(String title, String description,
                 Priority priority, TaskStatus status) {
-        this.id = id;
+
+        this.id = nextId++;
         this.title = title;
         this.description = description;
         this.priority = priority;
@@ -26,60 +31,51 @@ public class Task {
         return id;
     }
 
-    // Setter for ID
-    public void setId(int id) {
-        this.id = nextId++;
-    }
-
-    // Getter for Title
+    // Getter and Setter for Title
     public String getTitle() {
         return title;
     }
 
-    // Setter for Title
     public void setTitle(String title) {
         this.title = title;
     }
 
-    // Getter for Description
+    // Getter and Setter for Description
     public String getDescription() {
         return description;
     }
 
-    // Setter for Description
     public void setDescription(String description) {
         this.description = description;
     }
 
-    // Getter for Priority
+    // Getter and Setter for Priority
     public Priority getPriority() {
         return priority;
     }
 
-    // Setter for Priority
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
 
-    // Getter for Status
+    // Getter and Setter for Status
     public TaskStatus getStatus() {
         return status;
     }
 
-    // Setter for Status
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
-    // toString Method
+    // Print Task Details
     @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", priority=" + priority +
-                ", status=" + status +
-                '}';
+        return "Task {" +
+                "\n  ID = " + id +
+                "\n  Title = " + title +
+                "\n  Description = " + description +
+                "\n  Priority = " + priority +
+                "\n  Status = " + status +
+                "\n}";
     }
 }
