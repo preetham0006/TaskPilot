@@ -108,7 +108,8 @@ switch (statusChoice) {
                     );
 
                     manager.addTask(task);
-
+                    fileStorage.saveTasks(manager.getAllTasks()); //autosave
+                   // System.out.println("Task saved successfully.");
     }
 
     private void displayAllTasks()
@@ -163,10 +164,15 @@ switch (statusChoice) {
                     }
 
                     if (manager.updateTaskStatus(updateId, newStatus)) {
+
+                        fileStorage.saveTasks(manager.getAllTasks()); //autosave
                         System.out.println("Task updated successfully.");
-                    } else {
-                        System.out.println("Task not found.");
-                    }
+
+                        } 
+                        else {
+
+                                System.out.println("Task not found.");
+                        }
     }
 
     private void deleteTask()
@@ -176,10 +182,16 @@ switch (statusChoice) {
                     int deleteId = sc.nextInt();
 
                     if (manager.deleteTask(deleteId)) {
-                        System.out.println("Task deleted successfully.");
-                    } else {
-                        System.out.println("Task not found.");
-                    }
+
+    fileStorage.saveTasks(manager.getAllTasks());
+
+    System.out.println("Task deleted successfully.");
+
+} else {
+
+    System.out.println("Task not found.");
+
+}
     }
     
     private void searchByPriority() {
@@ -343,19 +355,22 @@ private void sortTasksByTitle() {
 
                 case 8:
 
-                    fileStorage.saveTasks(manager.getAllTasks());
-                    System.out.println("Tasks saved successfully!");
-
                     running = false;
                     System.out.println("\nThank you for using Task Management System!");
                     break;
+
                 case 9:
+
                     sortTasksByPriority();
                     break;   
+
                 case 10:
+
                     sortTasksByStatus();
-                    break;    
-                case 11:     
+                    break;
+
+                case 11:
+
                     sortTasksByTitle();
                     break;
 

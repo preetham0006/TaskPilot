@@ -35,13 +35,15 @@ public class FileStorage {
             Files.write(Path.of(FILE_NAME), lines);
            
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+    System.out.println("Error: Unable to save tasks.");
+}
     }
     public List<Task> loadTasks() {
 
     List<Task> tasks = new ArrayList<>();
-
+    if (!Files.exists(Path.of(FILE_NAME))) {
+    return tasks;
+}
     try {
         
 
@@ -65,9 +67,9 @@ tasks.add(task);
 }
 
     } catch (IOException e) {
-        e.printStackTrace();
-    }
-   System.out.println("Loaded Tasks: " + tasks.size());
+    System.out.println("Error: Unable to load saved tasks.");
+}
+   //System.out.println("Loaded Tasks: " + tasks.size());
     return tasks;
 }
 }
