@@ -14,10 +14,12 @@ public class ConsoleUI {
     private Scanner sc;
     private TaskManager manager;
     private FileStorage fileStorage = new FileStorage();
+    
 
     public ConsoleUI() {
         sc = new Scanner(System.in);
         manager = new TaskManager();
+        manager.setTasks(fileStorage.loadTasks());
     }
     private void displayMenu() 
     

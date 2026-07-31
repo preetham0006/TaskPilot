@@ -26,6 +26,22 @@ public class Task {
         this.priority = priority;
         this.status = status;
     }
+    public Task(int id,
+            String title,
+            String description,
+            Priority priority,
+            TaskStatus status) {
+
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.priority = priority;
+    this.status = status;
+
+    if (id >= nextId) {
+        nextId = id + 1;
+    }
+}
 
     // Getter for ID
     public int getId() {

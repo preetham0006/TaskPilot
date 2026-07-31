@@ -150,4 +150,7 @@ public List<Task> sortByTitle() {
 
     return sortedTasks;
 }
+public void setTasks(List<Task> tasks) {
+    this.tasks = tasks;
+}
 }
