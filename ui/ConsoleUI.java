@@ -22,10 +22,14 @@ public class ConsoleUI {
         sc = new Scanner(System.in);
         manager = new TaskManager();
         manager.setTasks(fileStorage.loadTasks());
+        System.out.println(manager.getFirstOverdueTask());
     }
+    
     private void displayMenu() 
     
     {
+
+    
     System.out.println("\n====================================");
     System.out.println("      TASK MANAGEMENT SYSTEM");
     System.out.println("====================================");
@@ -519,7 +523,7 @@ private void searchByDueDate() {
                 case 17:
                     searchByDueDate();
                     break;
-                    
+
                 default:
 
                     System.out.println("Invalid Choice! Please try again.");

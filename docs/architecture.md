@@ -40,6 +40,7 @@ Contains the core domain objects:
 - Task
 - Priority
 - TaskStatus
+- Due Date
 
 ### Comparator Layer
 Provides custom sorting strategies:

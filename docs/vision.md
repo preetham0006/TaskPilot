@@ -13,3 +13,9 @@ Future milestones include:
 - React frontend
 - Authentication
 - Docker deployment
+
+Current Progress
+
+Version 2.0 completed.
+
+TaskPilot now supports intelligent deadline management using Java LocalDate.

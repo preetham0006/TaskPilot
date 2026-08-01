@@ -1,5 +1,6 @@
 package service;
 import java.util.List;
+import java.util.Optional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import model.Task;
@@ -8,6 +9,9 @@ import model.Priority;
 import comparator.PriorityComparator;
 import comparator.StatusComparator;
 import java.time.LocalDate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.Optional;
 
 //import java.util.Collections;
 import java.util.Comparator;
@@ -32,21 +36,10 @@ public class TaskManager {
     public List<Task> getAllTasks() {
 
         return tasks;
-
-        /*if (tasks.isEmpty()) {
-            System.out.println("No tasks available.");
-            return;
-        }
-
-        System.out.println("\n========= TASK LIST =========");
-
-        for (Task task : tasks) {
-            System.out.println(task);
-        }*/
     }
 
     // Find a task using its ID
-    public Task findTaskById(int id) {
+public Task findTaskById(int id) {
 
         for (Task task : tasks) {
 
@@ -59,8 +52,7 @@ public class TaskManager {
         return null;
     }
 
-    // Update task status
-    public boolean updateTaskStatus(int id, TaskStatus newStatus) {
+public boolean updateTaskStatus(int id, TaskStatus newStatus) {
 
         Task task = findTaskById(id);
 
@@ -71,9 +63,7 @@ public class TaskManager {
 
         return false;
     }
-
-    // Delete a task
-    public boolean deleteTask(int id) {
+public boolean deleteTask(int id) {
 
         Task task = findTaskById(id);
 
@@ -84,181 +74,95 @@ public class TaskManager {
 
         return false;
     }
-    public List<Task> searchByPriority(Priority priority)
+public List<Task> searchByPriority(Priority priority)
     {
-        List<Task> result = new ArrayList<>();
-
-        for (Task task : tasks) {
-            if (task.getPriority() == priority) {
-                result.add(task);
-            }
-        }
-
-        return result;
+        return filterTasks(task -> task.getPriority() == priority);
     }
-    public List<Task> searchByStatus(TaskStatus status)
+public List<Task> searchByStatus(TaskStatus status)
     {
-        List<Task> result = new ArrayList<>();
-
-        for (Task task : tasks) {
-            if (task.getStatus() == status) {
-                result.add(task);
-            }
-        }
-
-        return result;
+        return filterTasks(task -> task.getStatus() == status);
     }
-    public List<Task> sortByPriority() {
-    List<Task> sortedTasks = new ArrayList<>(tasks);
+public List<Task> sortByPriority() {
 
-    // Sort the copied list
-    sortedTasks.sort(
-    new PriorityComparator()
-        .thenComparing(
-            Comparator.comparing(
-                Task::getTitle,
-                String.CASE_INSENSITIVE_ORDER
-            )
-        )
-);
+    return tasks.stream()
+            .sorted(Comparator.comparing(Task::getPriority))
+            .toList();
 
-
-    return sortedTasks;
 }
 public List<Task> sortByStatus() {
 
-    List<Task> sortedTasks = new ArrayList<>(tasks);
+    return tasks.stream()
+            .sorted(Comparator.comparing(Task::getStatus))
+            .toList();
 
-    sortedTasks.sort(
-    new StatusComparator()
-        .thenComparing(
-            Comparator.comparing(
-                Task::getTitle,
-                String.CASE_INSENSITIVE_ORDER
-            )
-        )
-);
-
-    return sortedTasks;
 }
 public List<Task> sortByTitle() {
 
-    List<Task> sortedTasks = new ArrayList<>(tasks);
+    return tasks.stream()
+            .sorted(Comparator.comparing(Task::getTitle))
+            .toList();
 
-    sortedTasks.sort(
-    Comparator.comparing(Task::getTitle, String.CASE_INSENSITIVE_ORDER));
-   // Collections.sort(sortedTasks,
-   // (task1, task2) -> task1.getTitle().compareToIgnoreCase(task2.getTitle()));
-
-    return sortedTasks;
 }
 public void setTasks(List<Task> tasks) {
     this.tasks = tasks;
 }
 public List<Task> getOverdueTasks() {
 
-    List<Task> overdueTasks = new ArrayList<>();
-
     LocalDate today = LocalDate.now();
 
-    for (Task task : tasks) {
+    return filterTasks(task ->
+            task.getDueDate().isBefore(today)
+            && task.getStatus() != TaskStatus.COMPLETED);
 
-        if (task.getDueDate().isBefore(today)
-                && task.getStatus() != TaskStatus.COMPLETED) {
-
-            overdueTasks.add(task);
-
-        }
-
-    }
-
-    return overdueTasks;
 }
 public List<Task> getTasksDueToday() {
 
-    List<Task> dueToday = new ArrayList<>();
+    //List<Task> dueToday = new ArrayList<>();
 
     LocalDate today = LocalDate.now();
 
-    for (Task task : tasks) {
+   
+    
+   return filterTasks(task-> task.getDueDate().isEqual(today)
+            && task.getStatus() != TaskStatus.COMPLETED);
 
-        if (task.getDueDate().isEqual(today)
-                && task.getStatus() != TaskStatus.COMPLETED) {
-
-            dueToday.add(task);
-
-        }
-
-    }
-
-    return dueToday;
+    
 }
 public List<Task> getUpcomingTasks() {
 
-    List<Task> upcomingTasks = new ArrayList<>();
-
     LocalDate today = LocalDate.now();
 
-    for (Task task : tasks) {
-
-        if (task.getDueDate().isAfter(today)
-                && task.getStatus() != TaskStatus.COMPLETED) {
-
-            upcomingTasks.add(task);
-
-        }
-
-    }
-
-    return upcomingTasks;
+    return filterTasks(task-> task.getDueDate().isAfter(today)
+            && task.getStatus() != TaskStatus.COMPLETED);
 }
 public List<Task> sortByDueDate() {
 
-    List<Task> sortedTasks = new ArrayList<>(tasks);
+    return tasks.stream()
+            .sorted(Comparator.comparing(Task::getDueDate))
+            .toList();
 
-    sortedTasks.sort(
-            Comparator.comparing(Task::getDueDate)
-    );
-
-    return sortedTasks;
 }
 public int getTotalTasks() {
     return tasks.size();
 }
 public int getCompletedTaskCount() {
 
-    int count = 0;
+    return (int) tasks.stream()
+            .filter(task -> task.getStatus() == TaskStatus.COMPLETED)
+            .count();
 
-    for (Task task : tasks) {
-
-        if (task.getStatus() == TaskStatus.COMPLETED) {
-            count++;
-        }
-
-    }
-
-    return count;
 }
 public int getPendingTaskCount() {
-
-    int count = 0;
-
-    for (Task task : tasks) {
-
-        if (task.getStatus() != TaskStatus.COMPLETED) {
-            count++;
-        }
-
-    }
-
-    return count;
+    return (int) tasks.stream()
+            .filter(task -> task.getStatus() != TaskStatus.COMPLETED)
+            .count();
 }
 public int getOverdueTaskCount() {
 
     return getOverdueTasks().size();
 
 }
-public int getDueTodayTaskCount() {
+public int getDueTodayTaskCount() { //todays
 
     return getTasksDueToday().size();
 
@@ -270,37 +174,57 @@ public int getUpcomingTaskCount() {
 }
 public List<Task> getTasksDueThisWeek() {
 
-    List<Task> weeklyTasks = new ArrayList<>();
-
     LocalDate today = LocalDate.now();
     LocalDate nextWeek = today.plusDays(7);
 
-    for (Task task : tasks) {
-
-        if (!task.getDueDate().isBefore(today)
-                && !task.getDueDate().isAfter(nextWeek)
-                && task.getStatus() != TaskStatus.COMPLETED) {
-
-            weeklyTasks.add(task);
-        }
-    }
-
-    return weeklyTasks;
+    return filterTasks(task-> !task.getDueDate().isBefore(today)
+            && !task.getDueDate().isAfter(nextWeek)
+            && task.getStatus() != TaskStatus.COMPLETED);
 }
-public List<Task> searchByDueDate(LocalDate dueDate) {
+public List<Task> searchByDueDate(LocalDate dueDate) 
+{
 
-    List<Task> result = new ArrayList<>();
+    return filterTasks(task -> task.getDueDate().isEqual(dueDate));
 
-    for (Task task : tasks) {
+}
+private List<Task> filterTasks(Predicate<Task> condition) {
 
-        if (task.getDueDate().isEqual(dueDate)) {
+    return tasks.stream()                   //Stream created here
+            .filter(condition)
+            .collect(Collectors.toList()); //Arraylist list created inside this (collect)
 
-            result.add(task);
+}
+public List<String> getAllTaskTitles() {
 
-        }
+    return tasks.stream()
+            .map(Task::getTitle)
+            .toList();
+}
+public boolean hasOverdueTasks() {
 
-    }
+    LocalDate today = LocalDate.now();
 
-    return result;
+    return tasks.stream()
+            .anyMatch(task ->
+                    task.getDueDate().isBefore(today)
+                    && task.getStatus() != TaskStatus.COMPLETED);
+
+}
+public Optional<Task> getFirstOverdueTask() {
+
+    LocalDate today = LocalDate.now();
+
+    return tasks.stream()
+            .filter(task ->
+                    task.getDueDate().isBefore(today)
+                    && task.getStatus() != TaskStatus.COMPLETED)
+            .findFirst();
+
+}
+public List<Task> sortByDueDateStream() {
+
+    return tasks.stream()
+            .sorted(Comparator.comparing(Task::getDueDate))
+            .toList();
 }
 }

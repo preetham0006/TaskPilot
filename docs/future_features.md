@@ -2,7 +2,6 @@
 
 ## Version 2.x
 
-- Due Dates
 - Categories
 - Task Filtering
 - Statistics Dashboard
