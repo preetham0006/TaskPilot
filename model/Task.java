@@ -1,4 +1,6 @@
 package model;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 public class Task {
 
     // Shared counter for generating unique IDs
@@ -10,6 +12,7 @@ public class Task {
     private String description;
     private Priority priority;
     private TaskStatus status;
+    private LocalDate dueDate;
 
     // Default Constructor
     public Task() {
@@ -17,26 +20,32 @@ public class Task {
     }
 
     // Parameterized Constructor
-    public Task(String title, String description,
-                Priority priority, TaskStatus status) {
+   public Task(String title,
+            String description,
+            Priority priority,
+            TaskStatus status,
+            LocalDate dueDate) {
 
-        this.id = nextId++;
-        this.title = title;
-        this.description = description;
-        this.priority = priority;
-        this.status = status;
-    }
-    public Task(int id,
+    this.id = nextId++;
+    this.title = title;
+    this.description = description;
+    this.priority = priority;
+    this.status = status;
+    this.dueDate = dueDate;
+}
+public Task(int id,
             String title,
             String description,
             Priority priority,
-            TaskStatus status) {
+            TaskStatus status,
+            LocalDate dueDate) {
 
     this.id = id;
     this.title = title;
     this.description = description;
     this.priority = priority;
     this.status = status;
+    this.dueDate = dueDate;
 
     if (id >= nextId) {
         nextId = id + 1;
@@ -83,6 +92,39 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+    public LocalDate getDueDate() {
+    return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+    this.dueDate = dueDate;
+    }
+    public long getDaysRemaining() {
+
+    return ChronoUnit.DAYS.between(
+            LocalDate.now(),
+            dueDate
+    );
+
+}
+public String getDueDateStatus() {
+
+    long days = getDaysRemaining();
+
+    if (status == TaskStatus.COMPLETED) {
+        return "[Completed]";
+    }
+
+    if (days == 0) {
+        return "[Due Today]";
+    }
+
+    if (days > 0) {
+        return "[" + days + " day(s) remaining]";
+    }
+
+    return "[Overdue by " + Math.abs(days) + " day(s)]";
+}
 
     // Print Task Details
     @Override
@@ -93,6 +135,8 @@ public class Task {
                 "\n  Description = " + description +
                 "\n  Priority = " + priority +
                 "\n  Status = " + status +
+                "\n  Due Date = " + dueDate +
+                "\n  " + getDueDateStatus() +
                 "\n}";
     }
 }

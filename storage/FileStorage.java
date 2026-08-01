@@ -9,6 +9,7 @@ import java.util.List;
 import model.Priority;
 import model.Task;
 import model.TaskStatus;
+import java.time.LocalDate;
 
 public class FileStorage {
 
@@ -26,7 +27,8 @@ public class FileStorage {
                     task.getTitle() + "|" +
                     task.getDescription() + "|" +
                     task.getPriority() + "|" +
-                    task.getStatus();
+                    task.getStatus()+ "|" +
+                    task.getDueDate();
 
             lines.add(line);
         }
@@ -60,7 +62,8 @@ public class FileStorage {
         parts[1],
         parts[2],
         Priority.valueOf(parts[3]),
-        TaskStatus.valueOf(parts[4])
+        TaskStatus.valueOf(parts[4]),
+        LocalDate.parse(parts[5])
 );
 
 tasks.add(task);

@@ -1,50 +1,59 @@
 # Changelog
 
-## v1.2
-
-### Added
-
-- Search tasks by Priority
-- Search tasks by Status
-- Reusable displayTasks() method
-
-### Changed
-
-- Refactored ConsoleUI into smaller methods.
-- TaskManager now returns List<Task> instead of printing directly.
-- Introduced List interface instead of exposing ArrayList.
-
-### Fixed
-
-- Invalid continue statement after refactoring.
-- Variable initialization issues during status updates.
+All notable changes to this project will be documented in this file.
 
 ---
 
-## v1.1
+## [v1.6.0]
+
+### Added
+
+- Automatic task loading
+- Automatic task saving
+- File persistence
+- Graceful handling of missing tasks.txt
+
+### Improved
+
+- Package organization
+- Exception handling
+- File management
+
+---
+
+## [v1.5.0]
+
+### Added
+
+- Save tasks to file
+- Load tasks from file
+- FileStorage module
+
+---
+
+## [v1.3.0]
+
+### Added
+
+- Project package structure
+- Comparator-based sorting
+
+---
+
+## [v1.2.0]
+
+### Added
+
+- Search by Priority
+- Search by Status
+- Sorting by Priority
+- Sorting by Status
+- Sorting by Title
+
+---
+
+## [v1.1.0]
 
 ### Added
 
 - CRUD Operations
-- Console-based menu
-
-### Changed
-
-- Introduced ConsoleUI class.
-
----
-
-## v1.0
-
-Initial project setup.
-## v1.3.0
-
-### Added
-- Sort tasks by Priority
-- Sort tasks by Status
-- PriorityComparator
-- StatusComparator
-- Non-destructive sorting using copied lists
-
-### Changed
-- TaskManager now supports sorting operations

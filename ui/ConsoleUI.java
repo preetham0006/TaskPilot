@@ -1,11 +1,13 @@
 package ui;
 import java.util.Scanner;
+import java.time.LocalDate;
 import java.util.List;
 import model.Task;
 import model.Priority;
 import model.TaskStatus;
 import service.TaskManager;
 import storage.FileStorage;
+import java.time.LocalDate;
 
 
 
@@ -38,6 +40,13 @@ public class ConsoleUI {
     System.out.println("9. Sort Tasks by Priority");
     System.out.println("10. Sort Tasks by Status");
     System.out.println("11. Sort Tasks by Title");
+    System.out.println("12. Display Overdue Tasks");
+    System.out.println("13. Display Tasks Due Today");
+    System.out.println("14. Display Upcoming Tasks");
+    System.out.println("15. Sort Tasks by Due Date");
+    System.out.println("16. Display Tasks Due This Week");
+    System.out.println("17. Search Tasks by Due Date");
+    //System.out.println("==================================");
     System.out.print("\nEnter your choice: ");
     }
 
@@ -100,11 +109,17 @@ switch (statusChoice) {
         status = TaskStatus.TODO;
 }
 
+                    System.out.print("Enter Due Date (YYYY-MM-DD): ");
+                    String dueDateInput = sc.nextLine();
+
+                    LocalDate dueDate = LocalDate.parse(dueDateInput);
+
                     Task task = new Task(
-                            title,
-                            description,
-                            priority,
-                            status
+                                title,
+                                description,
+                                priority,
+                                status,
+                                dueDate
                     );
 
                     manager.addTask(task);
@@ -307,13 +322,120 @@ private void sortTasksByTitle() {
 
     displayTasks(sortedTasks);
 }
+private void showOverdueTasks() {
 
+    List<Task> overdueTasks = manager.getOverdueTasks();
+
+    if (overdueTasks.isEmpty()) {
+        System.out.println("No overdue tasks.");
+        return;
+    }
+
+    for (Task task : overdueTasks) {
+        System.out.println(task);
+    }
+}
+private void showTasksDueToday() {
+
+    List<Task> dueToday = manager.getTasksDueToday();
+
+    if (dueToday.isEmpty()) {
+        System.out.println("No tasks due today.");
+        return;
+    }
+
+    for (Task task : dueToday) {
+        System.out.println(task);
+    }
+}
+private void showUpcomingTasks() {
+
+    List<Task> upcomingTasks = manager.getUpcomingTasks();
+
+    if (upcomingTasks.isEmpty()) {
+        System.out.println("No upcoming tasks.");
+        return;
+    }
+
+    for (Task task : upcomingTasks) {
+        System.out.println(task);
+    }
+}
+private void sortTasksByDueDate() {
+
+    List<Task> sortedTasks = manager.sortByDueDate();
+
+    if (sortedTasks.isEmpty()) {
+        System.out.println("No tasks available.");
+        return;
+    }
+
+    for (Task task : sortedTasks) {
+        System.out.println(task);
+    }
+}
+private void displayDashboard() {
+
+    System.out.println("\n====================================");
+    System.out.println("          TASK DASHBOARD");
+    System.out.println("====================================");
+
+    System.out.println("Total Tasks : " + manager.getTotalTasks());
+
+    System.out.println("Completed   : " + manager.getCompletedTaskCount());
+
+    System.out.println("Pending     : " + manager.getPendingTaskCount());
+
+    System.out.println("Overdue     : " + manager.getOverdueTaskCount());
+
+    System.out.println("Due Today   : " + manager.getDueTodayTaskCount());
+
+    System.out.println("Upcoming    : " + manager.getUpcomingTaskCount());
+
+    System.out.println("====================================\n");
+}
+private void showTasksDueThisWeek() {
+
+    List<Task> weeklyTasks = manager.getTasksDueThisWeek();
+
+    if (weeklyTasks.isEmpty()) {
+        System.out.println("No tasks due this week.");
+        return;
+    }
+
+    for (Task task : weeklyTasks) {
+        System.out.println(task);
+    }
+}
+private void searchByDueDate() {
+
+    System.out.print("Enter Due Date (YYYY-MM-DD): ");
+
+    LocalDate dueDate = LocalDate.parse(sc.nextLine());
+
+    List<Task> tasks = manager.searchByDueDate(dueDate);
+
+    if (tasks.isEmpty()) {
+
+        System.out.println("No tasks found.");
+
+        return;
+
+    }
+
+    for (Task task : tasks) {
+
+        System.out.println(task);
+
+    }
+
+}
 
     public void start() {
          boolean running = true;
-
+        
         while (running) {
-
+            displayDashboard();
             displayMenu(); // prints the menu
 
             int option = sc.nextInt(); //collecting option
@@ -373,7 +495,31 @@ private void sortTasksByTitle() {
 
                     sortTasksByTitle();
                     break;
+                
+                case 12:
+                    showOverdueTasks();
+                    break;
 
+                case 13:
+                    showTasksDueToday();
+                    break;
+
+                case 14:
+                    showUpcomingTasks();
+                    break;
+                
+                case 15:
+                    sortTasksByDueDate();
+                    break;
+
+                case 16:
+                    showTasksDueThisWeek();
+                    break;
+                
+                case 17:
+                    searchByDueDate();
+                    break;
+                    
                 default:
 
                     System.out.println("Invalid Choice! Please try again.");

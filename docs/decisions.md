@@ -1,111 +1,29 @@
-# Architecture Decisions
+# Design Decisions
 
-This document records important design decisions made during the development of JiraClone.
+## Why ArrayList?
 
----
-
-# ADR-001
-
-## Decision
-
-Use a Console Application for Version 1.
+ArrayList provides fast iteration and is well suited for a console-based task management application where the number of tasks is relatively small.
 
 ---
 
-## Problem
+## Why Enums?
 
-The project is in its initial stage.
-
-The objective is to understand software engineering fundamentals rather than UI development.
+Priority and TaskStatus have a fixed set of values. Enums provide type safety and improve code readability.
 
 ---
 
-## Alternatives Considered
+## Why Comparator?
 
-- Desktop GUI
-- Web Application
-- Console Application
+Sorting strategies are separated from the Task model, making it easier to introduce new sorting methods without modifying existing classes.
 
 ---
 
-## Selected Solution
+## Why File Storage?
 
-Console Application
-
----
-
-## Reason
-
-- Easy to build
-- Focus on business logic
-- No framework dependencies
-- Helps understand Core Java concepts
+File persistence was chosen instead of a database to focus on learning Java File I/O before introducing JDBC and SQL.
 
 ---
 
-## Consequences
+## Why Package Organization?
 
-Advantages
-
-- Faster development
-- Easier debugging
-- Simpler architecture
-
-Disadvantages
-
-- Poor user experience
-- Not suitable for multiple users
-
-
----------------------------------------------------------------------------------------------
-
-# ADR-002
-
-## Decision
-
-Store Tasks in an ArrayList.
-
----
-
-## Problem
-
-The application needs a way to store tasks while it is running.
-
----
-
-## Alternatives Considered
-
-- Array
-- LinkedList
-- HashMap
-- Database
-
----
-
-## Selected Solution
-
-ArrayList
-
----
-
-## Reason
-
-- Dynamic size
-- Easy iteration
-- Simple implementation
-- Suitable for Version 1
-
----
-
-## Consequences
-
-Advantages
-
-- Simple
-- Fast enough for a small number of tasks
-
-Disadvantages
-
-- Linear search
-- Data disappears after application closes
-- Not scalable
+The project is organized into packages to separate concerns and improve maintainability.
