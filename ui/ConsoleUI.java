@@ -25,7 +25,7 @@ public class ConsoleUI {
         sc = new Scanner(System.in);
         manager = new TaskManager();
         manager.setTasks(fileStorage.loadTasks());
-        
+       // System.out.println(manager.getCategoryStatistics());
     }
     
     private void displayMenu() 
@@ -55,6 +55,7 @@ public class ConsoleUI {
     System.out.println("17. Search Tasks by Due Date");
     System.out.println("18. Search Tasks by Category");
     System.out.println("19. Sort Tasks by Category");
+    System.out.println("20. Display Task Statistics");
     //System.out.println("==================================");
     System.out.print("\nEnter your choice: ");
     }
@@ -453,7 +454,30 @@ private void searchByDueDate() {
     }
 
 }
+private void displayStatistics() {
 
+    System.out.println("\n========== TASK STATISTICS ==========\n");
+
+    System.out.println("Tasks by Category");
+    manager.getCategoryStatistics()
+            .forEach((category, count) ->
+                    System.out.println(category + " : " + count));
+
+    System.out.println("\nTasks by Priority");
+    manager.getPriorityStatistics()
+            .forEach((priority, count) ->
+                    System.out.println(priority + " : " + count));
+
+    System.out.println("\nTasks by Status");
+    manager.getStatusStatistics()
+            .forEach((status, count) ->
+                    System.out.println(status + " : " + count));
+
+    System.out.printf("\nCompletion Percentage : %.2f%%\n",
+            manager.getCompletionPercentage());
+
+    System.out.println("\n====================================");
+}
     public void start() {
          boolean running = true;
         
@@ -559,9 +583,13 @@ private void searchByDueDate() {
                     displayTasks(manager.searchByCategory(category));
 
                     break;
-                    
+
                 case 19:
                     displayTasks(manager.sortByCategory());
+                    break;
+                
+                case 20:
+                    displayStatistics();
                     break;
 
                 default:

@@ -52,14 +52,29 @@ Filtered Result
 - Saves tasks to `tasks.txt`.
 - Loads tasks during application startup.
 
-### Model Layer
-Contains the core domain objects:
-- Task
+### Task Model
+
+Each task contains:
+
+- ID
+- Title
+- Description
 - Priority
-- TaskStatus
+- Status
 - Due Date
+- Category
 
 ### Comparator Layer
 Provides custom sorting strategies:
 - PriorityComparator
 - StatusComparator
+
+## Category Flow
+
+ConsoleUI
+      ↓
+Task
+      ↓
+TaskManager
+      ↓
+FileStorage

@@ -1,5 +1,6 @@
 package service;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.Optional;
 import model.Category;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 //import java.util.Collections;
 import java.util.Comparator;
@@ -240,5 +243,41 @@ public List<Task> sortByDueDateStream() {
     return tasks.stream()
             .sorted(Comparator.comparing(Task::getDueDate))
             .toList();
+}
+public Map<Category, Long> getCategoryStatistics() {
+
+    return tasks.stream()
+            .collect(Collectors.groupingBy(
+                    Task::getCategory,
+                    Collectors.counting()
+            ));
+
+}
+public Map<Priority, Long> getPriorityStatistics() {
+
+    return tasks.stream()
+            .collect(Collectors.groupingBy(
+                    Task::getPriority,
+                    Collectors.counting()
+            ));
+
+}
+public Map<TaskStatus, Long> getStatusStatistics() {
+
+    return tasks.stream()
+            .collect(Collectors.groupingBy(
+                    Task::getStatus,
+                    Collectors.counting()
+            ));
+
+}
+public double getCompletionPercentage() {
+
+    if (tasks.isEmpty()) {
+        return 0.0;
+    }
+
+    return (getCompletedTaskCount() * 100.0) / tasks.size();
+
 }
 }

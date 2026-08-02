@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+# [v2.2.0]
+
+## Added
+- Category enum
+- Category field in Task
+- Search by Category
+- Sort by Category
+
+## Changed
+- Updated Task model
+- Updated FileStorage for category persistence
+- Updated ConsoleUI to support category selection
+- Improved task organization
+
+---
+
 ## [v2.1.0]
 
 ### Added

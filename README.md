@@ -48,18 +48,34 @@ TaskPilot is a Java-based console Task Management System developed to strengthen
 - Method References
 - Comparator API
 
+### Categories
+- Organize tasks using categories
+- Search tasks by category
+- Sort tasks by category
+
+Available Categories:
+- Work
+- Study
+- Personal
+- Health
+- Shopping
+- Other
+
 ---
 
-## 🛠 Tech Stack
+## 🛠 Technologies Used
 
 - Java 21+ (Compatible with JDK 25)
-- Collections Framework
-- Java Stream API
-- Functional Interfaces
-- File I/O
-- LocalDate API
-- Comparator API
 - Object-Oriented Programming
+- Collections Framework
+- Java Streams API
+- Functional Interfaces (Predicate)
+- Lambda Expressions
+- Method References
+- Comparator API
+- LocalDate API
+- File I/O
+- Enums
 
 ---
 
@@ -140,6 +156,13 @@ Compile and execute the project using your preferred Java IDE or VS Code.
 ---
 
 ## 🚀 Version History
+
+### v2.2.0
+- Added task categories
+- Search tasks by category
+- Sort tasks by category
+- Category persistence in file storage
+- Updated console interface
 
 ### v2.1.0
 - Refactored filtering using Predicate
