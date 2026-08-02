@@ -10,13 +10,13 @@ import model.Priority;
 import model.Task;
 import model.TaskStatus;
 import java.time.LocalDate;
+import model.Category;
 
 public class FileStorage {
 
     private static final String FILE_NAME = "tasks.txt";
 
     public void saveTasks(List<Task> tasks) {
-        //System.out.println("saveTasks() called");
 
         List<String> lines = new ArrayList<>();
 
@@ -28,7 +28,8 @@ public class FileStorage {
                     task.getDescription() + "|" +
                     task.getPriority() + "|" +
                     task.getStatus()+ "|" +
-                    task.getDueDate();
+                    task.getDueDate()+ "|" +
+                    task.getCategory();
 
             lines.add(line);
         }
@@ -50,9 +51,7 @@ public class FileStorage {
         
 
         List<String> lines = Files.readAllLines(Path.of(FILE_NAME));
-       /*  for (String line : lines) {
-    System.out.println(line);
-}*/
+
         for (String line : lines) {
 
     String[] parts = line.split("\\|");
@@ -63,7 +62,8 @@ public class FileStorage {
         parts[2],
         Priority.valueOf(parts[3]),
         TaskStatus.valueOf(parts[4]),
-        LocalDate.parse(parts[5])
+        LocalDate.parse(parts[5]),
+        Category.valueOf(parts[6])
 );
 
 tasks.add(task);

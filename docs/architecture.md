@@ -24,11 +24,28 @@ TaskPilot follows a layered architecture to separate user interaction, business 
 - Accepts user input.
 - Coordinates operations between TaskManager and FileStorage.
 
-### TaskManager
-- Maintains the collection of tasks.
-- Implements CRUD operations.
-- Performs searching and sorting.
-- Does not know how tasks are stored.
+## TaskManager
+
+TaskManager acts as the core business layer of TaskPilot.
+
+Responsibilities:
+
+- Manage CRUD operations
+- Search tasks
+- Filter tasks using Predicate
+- Sort tasks using Comparator and Streams
+- Dashboard calculations
+- Due Date management
+
+Filtering Pipeline
+
+Task List
+    ↓
+Stream
+    ↓
+Predicate
+    ↓
+Filtered Result
 
 ### FileStorage
 - Responsible for persistence.

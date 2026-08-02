@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.Optional;
+import model.Category;
 
 //import java.util.Collections;
 import java.util.Comparator;
@@ -82,6 +83,12 @@ public List<Task> searchByStatus(TaskStatus status)
     {
         return filterTasks(task -> task.getStatus() == status);
     }
+public List<Task> searchByCategory(Category category) {
+
+    return filterTasks(task -> task.getCategory() == category);
+
+}
+
 public List<Task> sortByPriority() {
 
     return tasks.stream()
@@ -100,6 +107,13 @@ public List<Task> sortByTitle() {
 
     return tasks.stream()
             .sorted(Comparator.comparing(Task::getTitle))
+            .toList();
+
+}
+public List<Task> sortByCategory() {
+
+    return tasks.stream()
+            .sorted(Comparator.comparing(Task::getCategory))
             .toList();
 
 }

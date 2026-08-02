@@ -8,6 +8,8 @@ import model.TaskStatus;
 import service.TaskManager;
 import storage.FileStorage;
 import java.time.LocalDate;
+import model.Category;
+
 
 
 
@@ -16,13 +18,14 @@ public class ConsoleUI {
     private Scanner sc;
     private TaskManager manager;
     private FileStorage fileStorage = new FileStorage();
+    private Category category; 
     
 
     public ConsoleUI() {
         sc = new Scanner(System.in);
         manager = new TaskManager();
         manager.setTasks(fileStorage.loadTasks());
-        System.out.println(manager.getFirstOverdueTask());
+        
     }
     
     private void displayMenu() 
@@ -50,6 +53,8 @@ public class ConsoleUI {
     System.out.println("15. Sort Tasks by Due Date");
     System.out.println("16. Display Tasks Due This Week");
     System.out.println("17. Search Tasks by Due Date");
+    System.out.println("18. Search Tasks by Category");
+    System.out.println("19. Sort Tasks by Category");
     //System.out.println("==================================");
     System.out.print("\nEnter your choice: ");
     }
@@ -88,7 +93,20 @@ public class ConsoleUI {
                             System.out.println("Invalid Priority! Setting to LOW.");
                             priority = Priority.LOW;
                     }
-                    System.out.println("Select Status:");
+System.out.println("Select Category:"); //cateogory selection
+
+Category[] categories = Category.values();
+
+for (int i = 0; i < categories.length; i++) {
+    System.out.println((i + 1) + ". " + categories[i]);
+}
+
+System.out.print("Enter Category: ");
+int categoryChoice = Integer.parseInt(sc.nextLine());
+
+Category category = categories[categoryChoice - 1];
+
+System.out.println("Select Status:");
 System.out.println("1. TODO");
 System.out.println("2. IN_PROGRESS");
 System.out.println("3. COMPLETED");
@@ -123,12 +141,13 @@ switch (statusChoice) {
                                 description,
                                 priority,
                                 status,
-                                dueDate
+                                dueDate,
+                                category
                     );
 
                     manager.addTask(task);
                     fileStorage.saveTasks(manager.getAllTasks()); //autosave
-                   // System.out.println("Task saved successfully.");
+
     }
 
     private void displayAllTasks()
@@ -522,6 +541,27 @@ private void searchByDueDate() {
                 
                 case 17:
                     searchByDueDate();
+                    break;
+
+                case 18:
+
+                    System.out.println("Select Category:");
+                    Category[] categories = Category.values();
+                    for (int i = 0; i < categories.length; i++) {
+                        System.out.println((i + 1) + ". " + categories[i]);
+                    }
+
+                    System.out.print("Enter Category: ");
+                    int categoryChoice = Integer.parseInt(sc.nextLine());
+
+                    Category category = categories[categoryChoice - 1];
+
+                    displayTasks(manager.searchByCategory(category));
+
+                    break;
+                    
+                case 19:
+                    displayTasks(manager.sortByCategory());
                     break;
 
                 default:

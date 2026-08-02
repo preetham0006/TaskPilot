@@ -13,6 +13,7 @@ public class Task {
     private Priority priority;
     private TaskStatus status;
     private LocalDate dueDate;
+    private Category category;
 
     // Default Constructor
     public Task() {
@@ -24,12 +25,13 @@ public class Task {
             String description,
             Priority priority,
             TaskStatus status,
-            LocalDate dueDate) {
+            LocalDate dueDate, Category category) {
 
     this.id = nextId++;
     this.title = title;
     this.description = description;
     this.priority = priority;
+    this.category = category;
     this.status = status;
     this.dueDate = dueDate;
 }
@@ -38,12 +40,14 @@ public Task(int id,
             String description,
             Priority priority,
             TaskStatus status,
-            LocalDate dueDate) {
+            LocalDate dueDate,
+            Category category) {
 
     this.id = id;
     this.title = title;
     this.description = description;
     this.priority = priority;
+    this.category = category;
     this.status = status;
     this.dueDate = dueDate;
 
@@ -137,6 +141,14 @@ public String getDueDateStatus() {
                 "\n  Status = " + status +
                 "\n  Due Date = " + dueDate +
                 "\n  " + getDueDateStatus() +
+                "\n  Category = " + category +
                 "\n}";
     }
+public Category getCategory() {
+    return category;
+}
+
+public void setCategory(Category category) {
+    this.category = category;
+}
 }

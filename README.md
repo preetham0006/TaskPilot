@@ -4,40 +4,62 @@ TaskPilot is a Java-based console Task Management System developed to strengthen
 
 ## ✨ Features
 
-### Current Features (v1.6.0)
+### Task Management
+- Add new tasks
+- Update task status
+- Delete tasks
+- View all tasks
 
-- ✅ Add Tasks
-- ✅ Display All Tasks
-- ✅ Find Task by ID
-- ✅ Search Tasks by Priority
-- ✅ Search Tasks by Status
-- ✅ Update Task Status
-- ✅ Delete Tasks
-- ✅ Sort by Priority
-- ✅ Sort by Status
-- ✅ Sort by Title
-- ✅ Persistent Storage using File I/O
-- ✅ Automatic Task Loading
-- ✅ Automatic Task Saving
-- ✅ Graceful Missing File Handling
-- ✅ Due Dates
-- ✅ OverDue Tasks
-- ✅ Due Today
-- ✅ Due This Week
-- ✅ Upcoming Tasks
-- ✅ Dashboard
-- ✅ Sort By Due Date
-- ✅ Search By Due Date
+### Search & Filter
+- Search by ID
+- Search by Priority
+- Search by Status
+- Search by Due Date
+
+### Sorting
+- Sort by Title
+- Sort by Priority
+- Sort by Status
+- Sort by Due Date
+
+### Due Date Management
+- Due Today
+- Upcoming Tasks
+- Overdue Tasks
+- Tasks Due This Week
+- Days Remaining
+
+### Dashboard
+- Total Tasks
+- Completed Tasks
+- Pending Tasks
+- Overdue Count
+- Due Today Count
+- Upcoming Count
+
+### Persistence
+- Automatic Save
+- Automatic Load
+
+### Modern Java Features
+- Java Streams API
+- Functional Interfaces (Predicate)
+- Lambda Expressions
+- Method References
+- Comparator API
 
 ---
 
 ## 🛠 Tech Stack
 
-- Java
-- Java Collections Framework
-- Java File I/O (NIO Files API)
+- Java 21+ (Compatible with JDK 25)
+- Collections Framework
+- Java Stream API
+- Functional Interfaces
+- File I/O
+- LocalDate API
+- Comparator API
 - Object-Oriented Programming
-- Git & GitHub
 
 ---
 
@@ -114,6 +136,33 @@ Compile and execute the project using your preferred Java IDE or VS Code.
 - Exception Handling
 - Package Organization
 - Git & GitHub
+
+---
+
+## 🚀 Version History
+
+### v2.1.0
+- Refactored filtering using Predicate
+- Introduced Java Streams API
+- Simplified sorting using Streams
+- Added Method References
+- Improved TaskManager architecture
+- Reduced duplicate code
+
+### v2.0.0
+- Due Date support
+- Dashboard
+- Overdue Tasks
+- Due Today
+- Upcoming Tasks
+- Due This Week
+- Days Remaining
+
+### v1.x
+- CRUD Operations
+- Searching
+- Sorting
+- File Persistence
 
 ---
 

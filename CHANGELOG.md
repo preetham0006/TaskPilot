@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 
 ---
+
+## [v2.1.0]
+
+### Added
+- Java Streams API
+- Method References
+- Functional Programming concepts
+
+### Changed
+- Refactored filtering using Predicate
+- Replaced duplicate loops with generic filtering
+- Simplified sorting methods using Streams
+- Improved TaskManager readability
+- Cleaner architecture
+
+### Fixed
+- Removed duplicate filtering logic
+
+---
+
 ## [v2.0.0]
 
 ### Added
@@ -21,6 +41,8 @@ All notable changes to this project will be documented in this file.
 
 - Task model redesigned with LocalDate
 - File persistence updated for due dates
+
+---
 
 ## [v1.6.0]
 
