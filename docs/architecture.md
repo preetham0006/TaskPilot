@@ -1,80 +1,83 @@
 # TaskPilot Architecture
 
-## Overview
+## Layered Architecture
 
-TaskPilot follows a layered architecture to separate user interaction, business logic, and data persistence.
+```
+ConsoleUI
+     │
+     ▼
+TaskManager
+     │
+     ▼
+TaskRepository
+     │
+     ▼
+DatabaseConnection
+     │
+     ▼
+MySQL
+```
 
-        ConsoleUI
-             │
-             ▼
-      TaskManager
-             │
-             ▼
-      FileStorage
-             │
-             ▼
-         tasks.txt
+---
 
-         
-## Components
+## Responsibilities
 
 ### ConsoleUI
+
 - Handles user interaction.
 - Displays menus.
-- Accepts user input.
-- Coordinates operations between TaskManager and FileStorage.
+- Reads user input.
 
-## TaskManager
+### TaskManager
 
-TaskManager acts as the core business layer of TaskPilot.
+- Contains business logic.
+- Validates operations.
+- Maintains the in-memory task list.
+- Coordinates with TaskRepository.
 
-Responsibilities:
+### TaskRepository
 
-- Manage CRUD operations
-- Search tasks
-- Filter tasks using Predicate
-- Sort tasks using Comparator and Streams
-- Dashboard calculations
-- Due Date management
+- Executes SQL queries.
+- Performs CRUD operations.
+- Maps database rows to Task objects.
 
-Filtering Pipeline
+### DatabaseConnection
 
-Task List
-    ↓
-Stream
-    ↓
-Predicate
-    ↓
-Filtered Result
+- Creates JDBC connections.
+- Manages database connectivity.
 
-### FileStorage
-- Responsible for persistence.
-- Saves tasks to `tasks.txt`.
-- Loads tasks during application startup.
+### MySQL
 
-### Task Model
+- Permanent storage for all tasks.
 
-Each task contains:
+---
 
-- ID
-- Title
-- Description
-- Priority
-- Status
-- Due Date
-- Category
+## Design Principles
 
-### Comparator Layer
-Provides custom sorting strategies:
-- PriorityComparator
-- StatusComparator
+- Separation of Concerns
+- Repository Pattern
+- Layered Architecture
+- Single Responsibility Principle
 
-## Category Flow
+---
 
+## Data Flow
+
+```
+User
+   │
+   ▼
 ConsoleUI
-      ↓
-Task
-      ↓
+   │
+   ▼
 TaskManager
-      ↓
-FileStorage
+   │
+   ▼
+TaskRepository
+   │
+   ▼
+JDBC
+   │
+   ▼
+MySQL
+```

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import model.Task;
 import model.TaskStatus;
+import repository.TaskRepository;
 import model.Priority;
 import comparator.PriorityComparator;
 import comparator.StatusComparator;
@@ -20,21 +21,36 @@ import java.util.stream.Collectors;
 //import java.util.Collections;
 import java.util.Comparator;
 
+
 public class TaskManager {
 
     // Stores all the tasks
     private List<Task> tasks; //encapsulation  
+    private TaskRepository repository;
 
-    // Constructor
+    
     public TaskManager() {
-        tasks = new ArrayList<>();
+        repository = new TaskRepository();
+        tasks = repository.findAll();
+        
     }
 
     // Add a new task
     public void addTask(Task task) {
+
+    if (repository.save(task)) {
+
         tasks.add(task);
+
         System.out.println("Task added successfully!");
+
+    } else {
+
+        System.out.println("Failed to add task!");
+
     }
+
+}
 
     // Display all tasks
     public List<Task> getAllTasks() {
@@ -58,26 +74,34 @@ public Task findTaskById(int id) {
 
 public boolean updateTaskStatus(int id, TaskStatus newStatus) {
 
-        Task task = findTaskById(id);
+    Task task = findTaskById(id);
 
-        if (task != null) {
-            task.setStatus(newStatus);
-            return true;
-        }
+    if (task != null && repository.updateTaskStatus(id, newStatus)) {
 
-        return false;
+        task.setStatus(newStatus);
+
+        return true;
+
     }
+
+    return false;
+
+}
 public boolean deleteTask(int id) {
 
-        Task task = findTaskById(id);
+    Task task = findTaskById(id);
 
-        if (task != null) {
-            tasks.remove(task);
-            return true;
-        }
+    if (task != null && repository.deleteTask(id)) { //If deleted in database, then delete from list
 
-        return false;
+        tasks.remove(task);
+
+        return true;
+
     }
+
+    return false;
+
+}
 public List<Task> searchByPriority(Priority priority)
     {
         return filterTasks(task -> task.getPriority() == priority);

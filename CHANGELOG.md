@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+# [v2.3.0]
+
+## Added
+- Statistics Dashboard
+- Category Statistics
+- Priority Statistics
+- Status Statistics
+- Completion Percentage
+
+## Changed
+- Improved dashboard analytics
+- Introduced Collectors.groupingBy()
+- Introduced Collectors.counting()
+
+---
+
 # [v2.2.0]
 
 ## Added

@@ -6,7 +6,6 @@ import model.Task;
 import model.Priority;
 import model.TaskStatus;
 import service.TaskManager;
-import storage.FileStorage;
 import java.time.LocalDate;
 import model.Category;
 
@@ -17,21 +16,17 @@ public class ConsoleUI {
 
     private Scanner sc;
     private TaskManager manager;
-    private FileStorage fileStorage = new FileStorage();
     private Category category; 
     
 
     public ConsoleUI() {
         sc = new Scanner(System.in);
         manager = new TaskManager();
-        manager.setTasks(fileStorage.loadTasks());
-       // System.out.println(manager.getCategoryStatistics());
     }
     
     private void displayMenu() 
     
     {
-
     
     System.out.println("\n====================================");
     System.out.println("      TASK MANAGEMENT SYSTEM");
@@ -56,7 +51,6 @@ public class ConsoleUI {
     System.out.println("18. Search Tasks by Category");
     System.out.println("19. Sort Tasks by Category");
     System.out.println("20. Display Task Statistics");
-    //System.out.println("==================================");
     System.out.print("\nEnter your choice: ");
     }
 
@@ -147,7 +141,6 @@ switch (statusChoice) {
                     );
 
                     manager.addTask(task);
-                    fileStorage.saveTasks(manager.getAllTasks()); //autosave
 
     }
 
@@ -204,7 +197,6 @@ switch (statusChoice) {
 
                     if (manager.updateTaskStatus(updateId, newStatus)) {
 
-                        fileStorage.saveTasks(manager.getAllTasks()); //autosave
                         System.out.println("Task updated successfully.");
 
                         } 
@@ -222,7 +214,6 @@ switch (statusChoice) {
 
                     if (manager.deleteTask(deleteId)) {
 
-    fileStorage.saveTasks(manager.getAllTasks());
 
     System.out.println("Task deleted successfully.");
 
