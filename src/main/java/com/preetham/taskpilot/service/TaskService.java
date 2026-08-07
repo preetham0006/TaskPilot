@@ -1,10 +1,31 @@
 package com.preetham.taskpilot.service;
 
 import com.preetham.taskpilot.entity.Task;
+import com.preetham.taskpilot.mapper.TaskMapper;
 import com.preetham.taskpilot.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+
+import com.preetham.taskpilot.dto.PageResponseDTO;
 import com.preetham.taskpilot.dto.TaskRequestDTO;
 import com.preetham.taskpilot.dto.TaskResponseDTO;
+import com.preetham.taskpilot.dto.TaskStatisticsDTO;
+import com.preetham.taskpilot.dto.UpdateStatusDTO;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import com.preetham.taskpilot.enums.Priority;
+import com.preetham.taskpilot.enums.Status;
+import com.preetham.taskpilot.enums.Category;
+import com.preetham.taskpilot.exception.ResourceNotFoundException;
+
+import java.time.LocalDate;
+import java.util.List;
+import com.preetham.taskpilot.enums.Status;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -12,19 +33,40 @@ public class TaskService {
 
     private final TaskRepository repository;
 
+
     public TaskService(TaskRepository repository) {
         this.repository = repository;
     }
+    private Pageable createPageable(
+        int page,
+        int size,
+        String sortBy,
+        String direction) {
 
-    public List<TaskResponseDTO> getAllTasks() {
+    Sort sort = direction.equalsIgnoreCase("asc")
+            ? Sort.by(sortBy).ascending()
+            : Sort.by(sortBy).descending();
 
-    List<Task> tasks = repository.findAll();
+    return PageRequest.of(page, size, sort);
+}
 
-    return tasks.stream()           //stream() converts the list of tasks into a stream.
-            .map(task -> new TaskResponseDTO(    //map () transforms each task into a TaskResponseDTO.
-                    task.getId(),
-                    task.getTitle()))
-            .toList();
+    public PageResponseDTO<TaskResponseDTO> getAllTasks(
+        int page,
+        int size,
+        String sortBy,
+        String direction) {
+
+    Sort sort = direction.equalsIgnoreCase("asc")
+            ? Sort.by(sortBy).ascending()
+            : Sort.by(sortBy).descending();
+
+    Pageable pageable = createPageable(page, size, sortBy, direction);
+
+    Page<Task> tasks = repository.findAll(pageable);
+
+    Page<TaskResponseDTO> taskDTOPage = tasks.map(TaskMapper::toResponseDTO);
+
+    return PageResponseDTO.from(taskDTOPage);
 }
 
 public TaskResponseDTO getTaskById(Integer id) {
@@ -35,22 +77,13 @@ public TaskResponseDTO getTaskById(Integer id) {
         return null;
     }
 
-    return new TaskResponseDTO(
-            task.getId(),
-            task.getTitle()
-    );
+    return TaskMapper.toResponseDTO(task);
 }
 public TaskResponseDTO createTask(TaskRequestDTO requestDTO) {
 
-    Task task = new Task();
-    task.setTitle(requestDTO.getTitle());
-
+    Task task = TaskMapper.toEntity(requestDTO);
     Task savedTask = repository.save(task);
-
-    return new TaskResponseDTO(
-            savedTask.getId(),
-            savedTask.getTitle()
-    );
+    return TaskMapper.toResponseDTO(savedTask);
 }
 public TaskResponseDTO updateTask(Integer id, TaskRequestDTO requestDTO) {
 
@@ -61,13 +94,15 @@ public TaskResponseDTO updateTask(Integer id, TaskRequestDTO requestDTO) {
     }
 
     existingTask.setTitle(requestDTO.getTitle());
+    existingTask.setDescription(requestDTO.getDescription());
+    existingTask.setPriority(requestDTO.getPriority());
+    existingTask.setStatus(requestDTO.getStatus());
+    existingTask.setCategory(requestDTO.getCategory());
+    existingTask.setDueDate(requestDTO.getDueDate());
 
     Task updatedTask = repository.save(existingTask);
 
-    return new TaskResponseDTO(
-            updatedTask.getId(),
-            updatedTask.getTitle()
-    );
+    return TaskMapper.toResponseDTO(updatedTask);
 }
 public boolean deleteTask(Integer id) {
 
@@ -80,5 +115,89 @@ public boolean deleteTask(Integer id) {
     repository.delete(existingTask);
 
     return true;
+}
+public PageResponseDTO<TaskResponseDTO> searchTasks(
+        String title,
+        int page,
+        int size,
+        String sortBy,
+        String direction) {
+
+    Pageable pageable = createPageable(page, size, sortBy, direction);
+
+    Page<Task> tasks =
+            repository.findByTitleContainingIgnoreCase(title, pageable);
+
+    Page<TaskResponseDTO> taskDTOPage =
+            tasks.map(TaskMapper::toResponseDTO);
+
+    return PageResponseDTO.from(taskDTOPage);
+}
+public TaskStatisticsDTO getTaskStatistics() {
+
+    List<Task> tasks = repository.findAll();
+
+    long totalTasks = tasks.size();
+
+    long completedTasks = tasks.stream()
+           .filter(task -> Status.COMPLETED.equals(task.getStatus()))
+            .count();
+
+    long pendingTasks = tasks.stream()
+            .filter(task -> Status.TODO.equals(task.getStatus()))
+            .count();
+
+    long inProgressTasks = tasks.stream()
+            .filter(task -> Status.IN_PROGRESS.equals(task.getStatus()))
+            .count();
+
+    long highPriorityTasks = tasks.stream()
+            .filter(task -> Priority.HIGH.equals(task.getPriority()))
+            .count();
+
+long overdueTasks = tasks.stream()
+        .filter(task ->
+                task.getDueDate() != null &&
+                task.getDueDate().isBefore(LocalDate.now()) &&
+                task.getStatus() != Status.COMPLETED)
+        .count();
+
+    return new TaskStatisticsDTO(
+            totalTasks,
+            completedTasks,
+            pendingTasks,
+            inProgressTasks,
+            highPriorityTasks,
+            overdueTasks
+    );
+}
+public TaskResponseDTO updateTaskStatus(Integer id, UpdateStatusDTO dto) {
+
+    Task task = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
+
+    task.setStatus(dto.getStatus());
+
+    Task updatedTask = repository.save(task);
+
+    return TaskMapper.toResponseDTO(updatedTask);
+}
+public PageResponseDTO<TaskResponseDTO> getOverdueTasks(
+        int page,
+        int size,
+        String sortBy,
+        String direction) {
+
+    Pageable pageable = createPageable(page, size, sortBy, direction);
+
+    Page<Task> tasks = repository.findByDueDateBeforeAndStatusNot(
+            LocalDate.now(),
+            Status.COMPLETED,
+            pageable
+    );
+
+    Page<TaskResponseDTO> taskDTOPage = tasks.map(TaskMapper::toResponseDTO);
+
+    return PageResponseDTO.from(taskDTOPage);
 }
 }
