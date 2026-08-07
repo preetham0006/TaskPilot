@@ -200,4 +200,42 @@ public PageResponseDTO<TaskResponseDTO> getOverdueTasks(
 
     return PageResponseDTO.from(taskDTOPage);
 }
+public PageResponseDTO<TaskResponseDTO> getTodayTasks(
+        int page,
+        int size,
+        String sortBy,
+        String direction) {
+
+    Pageable pageable = createPageable(page, size, sortBy, direction);
+
+    Page<Task> tasks = repository.findByDueDate(
+            LocalDate.now(),
+            pageable
+    );
+
+    Page<TaskResponseDTO> dtoPage = tasks.map(TaskMapper::toResponseDTO);
+
+    return PageResponseDTO.from(dtoPage);
+}
+public PageResponseDTO<TaskResponseDTO> getUpcomingTasks(
+        int page,
+        int size,
+        String sortBy,
+        String direction) {
+
+    Pageable pageable = createPageable(page, size, sortBy, direction);
+
+    LocalDate today = LocalDate.now();
+    LocalDate nextWeek = today.plusDays(7);
+
+    Page<Task> tasks = repository.findByDueDateBetween(
+            today,
+            nextWeek,
+            pageable
+    );
+
+    Page<TaskResponseDTO> dtoPage = tasks.map(TaskMapper::toResponseDTO);
+
+    return PageResponseDTO.from(dtoPage);
+}
 }

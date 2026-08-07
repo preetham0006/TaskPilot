@@ -126,4 +126,43 @@ public PageResponseDTO<TaskResponseDTO> getOverdueTasks(
             direction
     );
 }
+@GetMapping("/tasks/today")
+@Operation(summary = "Get tasks due today")
+public PageResponseDTO<TaskResponseDTO> getTodayTasks(
+
+        @RequestParam(defaultValue = "0") int page,
+
+        @RequestParam(defaultValue = "5") int size,
+
+        @RequestParam(defaultValue = "id") String sortBy,
+
+        @RequestParam(defaultValue = "asc") String direction) {
+
+    return taskService.getTodayTasks(
+            page,
+            size,
+            sortBy,
+            direction
+    );
+}
+@GetMapping("/tasks/upcoming")
+@Operation(summary = "Get upcoming tasks")
+
+public PageResponseDTO<TaskResponseDTO> getUpcomingTasks(
+
+        @RequestParam(defaultValue = "0") int page,
+
+        @RequestParam(defaultValue = "5") int size,
+
+        @RequestParam(defaultValue = "id") String sortBy,
+
+        @RequestParam(defaultValue = "asc") String direction) {
+
+    return taskService.getUpcomingTasks(
+            page,
+            size,
+            sortBy,
+            direction
+    );
+}
 }

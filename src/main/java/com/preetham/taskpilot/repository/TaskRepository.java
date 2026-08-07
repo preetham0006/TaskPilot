@@ -16,4 +16,11 @@ Page<Task> findByDueDateBeforeAndStatusNot(
         LocalDate dueDate,
         Status status,
         Pageable pageable);
+Page<Task> findByDueDate(
+        LocalDate dueDate,
+        Pageable pageable);
+Page<Task> findByDueDateBetween(
+        LocalDate startDate,
+        LocalDate endDate,
+        Pageable pageable);
 }
