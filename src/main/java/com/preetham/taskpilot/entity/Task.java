@@ -1,3 +1,4 @@
+//Entity = Database Model
 package com.preetham.taskpilot.entity;
 
 import jakarta.persistence.*;
@@ -12,8 +13,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Title cannot be blank")
-    @Size(min = 2, max = 100, message = "Title must be between 2 and 100 characters")
+   
     private String title;
 
     public Task() {

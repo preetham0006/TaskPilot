@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
+import com.preetham.taskpilot.dto.TaskRequestDTO;
+import com.preetham.taskpilot.dto.TaskResponseDTO;
 
 @RestController
 public class TaskController {
@@ -18,31 +20,32 @@ public class TaskController {
 
     // GET /tasks
     @GetMapping("/tasks")
-    public List<Task> getAllTasks() {
-        return taskService.getAllTasks();
+    public List<TaskResponseDTO> getAllTasks() {
+    return taskService.getAllTasks();
     }
 
     // GET /tasks/{id}
     @GetMapping("/tasks/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Integer id) {
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Integer id) {
 
-        Task task = taskService.getTaskById(id);
+    TaskResponseDTO task = taskService.getTaskById(id);
 
-        if (task == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(task);
+    if (task == null) {
+        return ResponseEntity.notFound().build();
     }
+
+    return ResponseEntity.ok(task);
+}
 @PostMapping("/tasks")
-public Task createTask(@Valid @RequestBody Task task) {
-
-    return taskService.createTask(task);
-
+public TaskResponseDTO createTask(@Valid @RequestBody TaskRequestDTO requestDTO) {
+    return taskService.createTask(requestDTO);
 }
 @PutMapping("/tasks/{id}")
-public ResponseEntity<Task> updateTask(@PathVariable Integer id, @RequestBody Task updatedTask) {
-    Task task = taskService.updateTask(id, updatedTask);
+public ResponseEntity<TaskResponseDTO> updateTask(
+        @PathVariable Integer id,
+        @Valid @RequestBody TaskRequestDTO requestDTO) {
+
+    TaskResponseDTO task = taskService.updateTask(id, requestDTO);
 
     if (task == null) {
         return ResponseEntity.notFound().build();

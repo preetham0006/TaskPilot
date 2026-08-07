@@ -3,7 +3,8 @@ package com.preetham.taskpilot.service;
 import com.preetham.taskpilot.entity.Task;
 import com.preetham.taskpilot.repository.TaskRepository;
 import org.springframework.stereotype.Service;
-
+import com.preetham.taskpilot.dto.TaskRequestDTO;
+import com.preetham.taskpilot.dto.TaskResponseDTO;
 import java.util.List;
 
 @Service
@@ -15,37 +16,69 @@ public class TaskService {
         this.repository = repository;
     }
 
-    public List<Task> getAllTasks() {
+    public List<TaskResponseDTO> getAllTasks() {
 
-        return repository.findAll();
+    List<Task> tasks = repository.findAll();
 
+    return tasks.stream()           //stream() converts the list of tasks into a stream.
+            .map(task -> new TaskResponseDTO(    //map () transforms each task into a TaskResponseDTO.
+                    task.getId(),
+                    task.getTitle()))
+            .toList();
+}
+
+public TaskResponseDTO getTaskById(Integer id) {
+
+    Task task = repository.findById(id).orElse(null);
+
+    if (task == null) {
+        return null;
     }
-    public Task getTaskById(Integer id) {
 
-    return repository.findById(id)
-            .orElse(null);
-
+    return new TaskResponseDTO(
+            task.getId(),
+            task.getTitle()
+    );
 }
-public Task createTask(Task task) {
+public TaskResponseDTO createTask(TaskRequestDTO requestDTO) {
 
-    return repository.save(task);
- // save returns the task because it is a JPA repository, which returns the saved entity after persisting it to the database.
+    Task task = new Task();
+    task.setTitle(requestDTO.getTitle());
+
+    Task savedTask = repository.save(task);
+
+    return new TaskResponseDTO(
+            savedTask.getId(),
+            savedTask.getTitle()
+    );
 }
-public Task updateTask(Integer id, Task updatedTask) {
-    Task existingTask = getTaskById(id);
+public TaskResponseDTO updateTask(Integer id, TaskRequestDTO requestDTO) {
+
+    Task existingTask = repository.findById(id).orElse(null);
+
     if (existingTask == null) {
-        return null; 
+        return null;
     }
-    existingTask.setTitle(updatedTask.getTitle());
-        return repository.save(existingTask);
+
+    existingTask.setTitle(requestDTO.getTitle());
+
+    Task updatedTask = repository.save(existingTask);
+
+    return new TaskResponseDTO(
+            updatedTask.getId(),
+            updatedTask.getTitle()
+    );
 }
-public boolean deleteTask(Integer id){
-    
-    Task existingTask = getTaskById(id);
+public boolean deleteTask(Integer id) {
+
+    Task existingTask = repository.findById(id).orElse(null);
+
     if (existingTask == null) {
-        return false; 
+        return false;
     }
+
     repository.delete(existingTask);
+
     return true;
 }
 }
