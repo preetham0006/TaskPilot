@@ -4,7 +4,7 @@ import com.preetham.taskpilot.entity.Task;
 import com.preetham.taskpilot.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,7 +35,7 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 @PostMapping("/tasks")
-public Task createTask(@RequestBody Task task) {
+public Task createTask(@Valid @RequestBody Task task) {
 
     return taskService.createTask(task);
 
