@@ -21,6 +21,10 @@ import com.preetham.taskpilot.enums.Status;
 import com.preetham.taskpilot.enums.Category;
 import com.preetham.taskpilot.exception.ResourceNotFoundException;
 
+import org.springframework.data.jpa.domain.Specification;
+
+import com.preetham.taskpilot.specification.TaskSpecification;
+
 import java.time.LocalDate;
 import java.util.List;
 import com.preetham.taskpilot.enums.Status;
@@ -233,6 +237,52 @@ public PageResponseDTO<TaskResponseDTO> getUpcomingTasks(
             nextWeek,
             pageable
     );
+
+    Page<TaskResponseDTO> dtoPage = tasks.map(TaskMapper::toResponseDTO);
+
+    return PageResponseDTO.from(dtoPage);
+}
+public PageResponseDTO<TaskResponseDTO> filterTasks(
+        Status status,
+        Priority priority,
+        Category category,
+        String title,
+        int page,
+        int size,
+        String sortBy,
+        String direction) {
+
+            Pageable pageable = createPageable(
+            page,
+            size,
+            sortBy,
+            direction);
+
+    Specification<Task> specification = Specification.unrestricted();
+    if (status != null) {
+
+    specification = specification.and(
+            TaskSpecification.hasStatus(status)
+    );
+
+    }
+    if (priority != null) {
+        specification = specification.and(
+                TaskSpecification.hasPriority(priority)
+        );
+    }
+    if (category != null) {
+        specification = specification.and(
+                TaskSpecification.hasCategory(category)
+        );
+    }
+    if (title != null && !title.isBlank()) {
+        specification = specification.and(
+                TaskSpecification.titleContains(title)
+        );
+    }
+
+    Page<Task> tasks = repository.findAll(specification, pageable);
 
     Page<TaskResponseDTO> dtoPage = tasks.map(TaskMapper::toResponseDTO);
 

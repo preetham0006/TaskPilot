@@ -8,8 +8,9 @@ import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.preetham.taskpilot.enums.Status;
-
-public interface TaskRepository extends JpaRepository<Task, Integer> {
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+    
+public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 //task means the entity class and Integer is the type of the primary key of the entity class
 Page<Task> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 Page<Task> findByDueDateBeforeAndStatusNot(

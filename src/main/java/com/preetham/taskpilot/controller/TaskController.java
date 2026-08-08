@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 
+import com.preetham.taskpilot.enums.Status;
+import com.preetham.taskpilot.enums.Priority;
+import com.preetham.taskpilot.enums.Category;
+
 import com.preetham.taskpilot.dto.PageResponseDTO;
 import com.preetham.taskpilot.dto.TaskRequestDTO;
 import com.preetham.taskpilot.dto.TaskResponseDTO;
@@ -159,6 +163,37 @@ public PageResponseDTO<TaskResponseDTO> getUpcomingTasks(
         @RequestParam(defaultValue = "asc") String direction) {
 
     return taskService.getUpcomingTasks(
+            page,
+            size,
+            sortBy,
+            direction
+    );
+}
+@GetMapping("/tasks/filter")
+@Operation(summary = "Filter tasks dynamically")
+public PageResponseDTO<TaskResponseDTO> filterTasks(
+
+        @RequestParam(required = false) Status status,
+
+        @RequestParam(required = false) Priority priority,
+
+        @RequestParam(required = false) Category category,
+
+        @RequestParam(required = false) String title,
+
+        @RequestParam(defaultValue = "0") int page,
+
+        @RequestParam(defaultValue = "5") int size,
+
+        @RequestParam(defaultValue = "id") String sortBy,
+
+        @RequestParam(defaultValue = "asc") String direction) {
+
+    return taskService.filterTasks(
+            status,
+            priority,
+            category,
+            title,
             page,
             size,
             sortBy,
