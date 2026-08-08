@@ -46,5 +46,18 @@ public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
 
     return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 }
+@ExceptionHandler(EmailAlreadyExistsException.class)
+public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(
+        EmailAlreadyExistsException ex,
+        HttpServletRequest request) {
 
+    ErrorResponse error = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.CONFLICT.value(),
+            ex.getMessage(),
+            request.getRequestURI()
+    );
+
+    return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+}
 }
